@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.NonNull;
+
 
 //Lombok autogenerere setters, getter og constructors
 @Setter
@@ -30,6 +32,7 @@ public class Cyclist {
 
 
     @ManyToOne
+    @NonNull
     private Team team;
 
     // @JoinColumn(name = "teamId", referencedColumnName = "id")

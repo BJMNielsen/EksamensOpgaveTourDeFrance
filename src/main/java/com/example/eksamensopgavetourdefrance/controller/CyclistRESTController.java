@@ -14,18 +14,32 @@ public class CyclistRESTController {
     @Autowired
     CyclistService cyclistService;
 
+    // Finder alle cyclister.
     @GetMapping("/cyclists")
     public List<Cyclist> getCyclists() {
         return cyclistService.getCyclists();
     }
 
+    // Finder cyclist ud fra id
     @GetMapping("/cyclist/{id}")
     public Cyclist getCyclist(@PathVariable int id){
-        return cyclistService.getCyclist();
+        return cyclistService.getCyclist(id);
     }
 
+    // Creater en cyclist.
     @PostMapping("/cyclist")
     public ResponseEntity<Cyclist> addCyclist(@RequestBody Cyclist cyclist){
-        return
+        return cyclistService.addCyclist(cyclist);
+    }
+
+    // Update en cyclist.
+    @PutMapping("/cyclist")
+    public ResponseEntity<Cyclist> updateCyclist(@RequestBody Cyclist cyclist) {
+        return cyclistService.updateCyclist(cyclist);
+    }
+
+    @DeleteMapping("/cyclist/{id}")
+    public ResponseEntity<Cyclist> deleteCyclist(@PathVariable int id) {
+        return cyclistService.deleteCyclist(id);
     }
 }
