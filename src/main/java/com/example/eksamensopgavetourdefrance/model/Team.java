@@ -26,6 +26,9 @@ public class Team {
     private int id;
     private String name;
 
+    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
+    @JsonBackReference // JsonBackReference gør at du ikke får en eternal bug, der kun viser den første cyclist i listen.
+    private List<Cyclist> cyclists;
 
     //In Spring JPA, the mappedBy attribute is used to indicate the inverse side of a bidirectional relationship between two entities.
     // It is used in conjunction with the @OneToMany, @OneToOne, or @ManyToMany annotations to specify the name of the attribute in the target entity that maps back to the source entity.
@@ -36,9 +39,6 @@ public class Team {
     // mappedBy gør at vi kun får 2 tabeller i vores bidirectional database.
     // Hvis du ikke har mappedBy på, så laver hibernate en ekstra tabel til foreign keys og det ID den er mapped til.
     // Hvis din database skal være bidirectional, så skal mappedBy være på. Ellers kommer den 3 tabel.
-    @OneToMany(mappedBy = "team")
-    @JsonBackReference // Jsonbackreference gør at du ikke får en eternal bug, der kun viser den første cyclist i listen.
-    private List<Cyclist> cyclists;
 
 
     public Team(String name){

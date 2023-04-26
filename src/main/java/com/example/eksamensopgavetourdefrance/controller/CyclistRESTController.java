@@ -42,4 +42,9 @@ public class CyclistRESTController {
     public ResponseEntity<Cyclist> deleteCyclist(@PathVariable int id) {
         return cyclistService.deleteCyclist(id);
     }
+
+    @GetMapping("/cyclists/{teamid}")
+    public List<Cyclist> getCyclistsByTeamId(@PathVariable int teamid){
+        return cyclistService.getCyclistsByTeamId(teamid);
+    }
 }

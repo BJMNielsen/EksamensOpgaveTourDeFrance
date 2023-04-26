@@ -4,6 +4,7 @@ import com.example.eksamensopgavetourdefrance.exception.ResourceAlreadyExistsExc
 import com.example.eksamensopgavetourdefrance.exception.ResourceNotFoundException;
 import com.example.eksamensopgavetourdefrance.model.Cyclist;
 import com.example.eksamensopgavetourdefrance.repository.CyclistRepository;
+import com.example.eksamensopgavetourdefrance.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,17 @@ public class CyclistService {
     @Autowired
     CyclistRepository cyclistRepository;
 
+    @Autowired
+    TeamRepository teamRepository;
+
     // metode til at vise alle cyclister.
-    public List<Cyclist> getCyclists(){
+    public List<Cyclist> getCyclists() {
         return cyclistRepository.findAll();
+        // Vi returner ikke et responseEntity på get requests, da vi jo får noget. Vi får enten objected, eller får en exception.
     }
 
     // metode til at finde specifik cyclist ud fra id.
-    public Cyclist getCyclist(int id){
+    public Cyclist getCyclist(int id) {
         return cyclistRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cyclist with id: " + id + " Could not be found."));
     }
 
@@ -31,7 +36,7 @@ public class CyclistService {
     public ResponseEntity<Cyclist> addCyclist(Cyclist cyclist) {
         // Først tjekker vi om cyclisten allerede eksistere, så vi ikke overrider den hvis den eksistere. Det gør vi med put.
         boolean exists = cyclistRepository.existsById(cyclist.getId());
-        if (!exists){
+        if (!exists) {
             // Hvis den ikke existere, så laver vi en ny og gemmer i databasen.
             Cyclist newCyclist = cyclistRepository.save(cyclist);
             return new ResponseEntity<>(newCyclist, HttpStatus.OK);
@@ -47,7 +52,7 @@ public class CyclistService {
         // Vi gemmer cyclisten som et Json objekt med de nye værdier i frontend, der så sendes ude fra frontenden hertil (cyclist)
         // og saver ham i databasen.
         boolean exists = cyclistRepository.existsById(cyclist.getId());
-        if (exists){
+        if (exists) {
             Cyclist updatedCyclist = cyclistRepository.save(cyclist);
             return new ResponseEntity<>(updatedCyclist, HttpStatus.OK);
         }
@@ -58,12 +63,26 @@ public class CyclistService {
         //Måske lav en metode der tjekker om en cyclist eksistere, da den bruges flere steder
         // Først tjekker vi om han existerer.
         boolean exists = cyclistRepository.existsById(id);
-        if (exists){
+        if (exists) {
             // Hvis han existerer deleted vi ham.
             Cyclist deletedCyclist = getCyclist(id);
             cyclistRepository.deleteById(deletedCyclist.getId());
             return new ResponseEntity<>(deletedCyclist, HttpStatus.OK);
         }
         throw new ResourceNotFoundException("Cyclist with id: " + id + " does not exist and could therefore not be deleted.");
+    }
+
+    public List<Cyclist> getCyclistsByTeamId(int teamid) {
+        // Vi tjekker om teamet eksistere først.
+        // Vi kunne også have brugt en optional med .orElseThrow(() -> new ResourceNotFoundException(),
+        // så havde vi ikke skulle lave et tjek på om teamet eksistere,
+        // fordi den ville return null og throw en exception hvis den ikke gjorde
+
+        boolean exists = teamRepository.existsById(teamid);
+        if (exists) {
+            // Vi har lavet vores egen metode der finder cyclister ud fra team id.
+            return cyclistRepository.findCyclistsByTeamId(teamid);
+        }
+        throw new ResourceNotFoundException("Team with id: " + teamid + " does not exist and could therefore not find any cyclists.");
     }
 }
