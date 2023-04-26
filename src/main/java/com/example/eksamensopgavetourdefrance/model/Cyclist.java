@@ -19,7 +19,7 @@ public class Cyclist {
 
     @Id
     // laver automatisk et nyt id hver gang vi laver en cyclist
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
     private int age;

@@ -1,5 +1,6 @@
 package com.example.eksamensopgavetourdefrance.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Team {
 
     @Id
     // laver automatisk et nyt id hver gang vi laver et team
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     private String name;
 
@@ -36,7 +37,8 @@ public class Team {
     // Hvis du ikke har mappedBy på, så laver hibernate en ekstra tabel til foreign keys og det ID den er mapped til.
     // Hvis din database skal være bidirectional, så skal mappedBy være på. Ellers kommer den 3 tabel.
     @OneToMany(mappedBy = "team")
-    List<Cyclist> cyclists;
+    @JsonBackReference // Jsonbackreference gør at du ikke får en eternal bug, der kun viser den første cyclist i listen.
+    private List<Cyclist> cyclists;
 
 
     public Team(String name){

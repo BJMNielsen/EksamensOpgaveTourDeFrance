@@ -17,7 +17,6 @@ import java.util.List;
 @Configuration
 public class StartupDataConfig implements ApplicationRunner {
 
-
     // Her laver vi dependency injection med constructoren. Vi kan også bare lave autowired.
     /*
     CyclistRepository cyclistRepository;
@@ -57,6 +56,5 @@ public class StartupDataConfig implements ApplicationRunner {
         Collections.addAll(cyclistListe, Lars, Børge, Kevin);
         // Så gemmer vi vores liste af cyklister i databasen. Den gemmer hver cyklist i listen individuel i databasen.
         cyclistRepository.saveAll(cyclistListe);
-
     }
 }
