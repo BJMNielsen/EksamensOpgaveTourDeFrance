@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin // CrossOrigin gør at andre porte kan få lov til at fetche til din 8080 port.
 public class CyclistRESTController {
 
     @Autowired
